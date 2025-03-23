@@ -7,7 +7,7 @@ const rubikFont = Rubik({
 });
 
 export const metadata: Metadata = {
-  title: "just css filters",
+  title: "just audio video converter",
   description: "created by alien ^v^",
 };
 
