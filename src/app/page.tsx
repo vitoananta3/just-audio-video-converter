@@ -19,12 +19,12 @@ export default function Home() {
     e.preventDefault();
     
     if (!file) {
-      setConversionError('Please select an MP4 file');
+      setConversionError('Please select a video file');
       return;
     }
     
-    if (!file.name.toLowerCase().endsWith('.mp4')) {
-      setConversionError('Only MP4 files are supported');
+    if (!file.name.toLowerCase().endsWith('.mp4') && !file.name.toLowerCase().endsWith('.mkv')) {
+      setConversionError('Only MP4 and MKV files are supported');
       return;
     }
     
@@ -82,7 +82,7 @@ export default function Home() {
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
             <input
               type="file"
-              accept=".mp4"
+              accept=".mp4,.mkv"
               onChange={handleFileChange}
               className="hidden"
               id="file-upload"
@@ -91,7 +91,7 @@ export default function Home() {
               htmlFor="file-upload"
               className="cursor-pointer text-blue-500 hover:text-blue-700"
             >
-              {file ? file.name : 'Select MP4 Video File'}
+              {file ? file.name : 'Select MP4 or MKV Video File'}
             </label>
             {file && (
               <p className="mt-2 text-sm text-gray-500">
@@ -141,7 +141,7 @@ export default function Home() {
         
         <div className="mt-8 text-sm text-gray-500">
           <p>Note: This tool requires FFmpeg to be installed on the server.</p>
-          <p>Currently only supports MP4 to MP3 conversion.</p>
+          <p>Supports MP4 and MKV to MP3 conversion.</p>
         </div>
       </main>
     </div>

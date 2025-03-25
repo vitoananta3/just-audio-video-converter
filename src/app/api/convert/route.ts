@@ -26,27 +26,27 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
     
-    // Check if the file is an MP4
-    if (!file.name.toLowerCase().endsWith('.mp4')) {
-      return NextResponse.json({ error: 'Only MP4 files are supported' }, { status: 400 });
+    // Check if the file is an MP4 or MKV
+    if (!file.name.toLowerCase().endsWith('.mp4') && !file.name.toLowerCase().endsWith('.mkv')) {
+      return NextResponse.json({ error: 'Only MP4 and MKV files are supported' }, { status: 400 });
     }
     
     // Create a unique filename to avoid collisions
     const timestamp = Date.now();
     const filename = `${timestamp}_${file.name}`;
-    const mp4Path = join(UPLOADS_DIR, filename);
+    const inputPath = join(UPLOADS_DIR, filename);
     
     // Convert the file to buffer and save it
     const buffer = Buffer.from(await file.arrayBuffer());
-    await writeFile(mp4Path, buffer);
+    await writeFile(inputPath, buffer);
     
     // Generate output filename
-    const outputFilename = filename.replace(/\.mp4$/i, '.mp3');
+    const outputFilename = filename.replace(/\.(mp4|mkv)$/i, '.mp3');
     const mp3Path = join(OUTPUT_DIR, outputFilename);
     
     try {
       // Execute ffmpeg command to convert the video to audio
-      execSync(`ffmpeg -i "${mp4Path}" -q:a 0 -map a "${mp3Path}" -y`);
+      execSync(`ffmpeg -i "${inputPath}" -q:a 0 -map a "${mp3Path}" -y`);
       
       // Return the path to the converted file
       return NextResponse.json({ 
